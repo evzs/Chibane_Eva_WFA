@@ -21,6 +21,9 @@ namespace Tetris
 
         private bool[,] cellLocked = new bool[10, 20];
 
+        private bool gameOver = false;
+
+
         public TetrisForm()
         {
 
@@ -83,6 +86,8 @@ namespace Tetris
 
         private void GameTimer_Tick(object sender, EventArgs e)
         {
+
+            if (gameOver) return;
             if (MoveDown())
             {
                 currentBlockY++;
@@ -105,6 +110,7 @@ namespace Tetris
         }
         private void RowClearingTimer_Tick(object sender, EventArgs e)
         {
+            if (gameOver) return;
             RowCheck();  // Check and clear completed rows at each tick
         }
 
@@ -116,6 +122,7 @@ namespace Tetris
         {
             int[,] previousMatrix = (int[,])currentBlock.CurrentMatrix.Clone();
             if (blockSettled) return;
+            if (gameOver) return;
             switch (e.KeyCode)
             {
                 case Keys.Left:
@@ -341,6 +348,13 @@ namespace Tetris
                     }
                 }
             }
+            if (IsGameOver())
+            {
+                gameTimer.Stop();
+                rowClearingTimer.Stop();
+                gameOver = true;
+                MessageBox.Show("Game Over!");
+            }
         }
 
 
@@ -427,6 +441,17 @@ namespace Tetris
             }
         }
 
+        private bool IsGameOver()
+        {
+            for (int x = 0; x < 10; x++)
+            {
+                if (cellLocked[x, 0]) // 0 is the top row
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
 
         private void TetrisForm_Load(object sender, EventArgs e)
