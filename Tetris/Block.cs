@@ -20,20 +20,37 @@ namespace Tetris
 
     public class Block
     {
-        public BlockType BlockShape { get; set; }
-        public Image Texture { get; private set; }
-        public int[,] CurrentMatrix { get; private set; }
-        public int[,][] Rotations { get; private set; }
+        public BlockType BlockShape
+        {
+            get;
+            set;
+        }
+        public Image Texture
+        {
+            get;
+            private set;
+        }
+        public int[,] CurrentMatrix
+        {
+            get;
+            private set;
+        }
+
+        private int rotationIndex = 0;
+        public List<int[,]> Rotations
+        {
+            get;
+            private set;
+        }
 
         // Constructor to initialize a block with a random shape (random temporary here - maybe)
         public Block()
         {
-            // Random random = new Random();
-            // BlockShape = (BlockType)random.Next(0, Enum.GetValues(typeof(BlockType)).Length);
-            BlockShape = BlockType.I;
+            Random random = new Random();
+            BlockShape = (BlockType)random.Next(0, Enum.GetValues(typeof(BlockType)).Length);
+            // BlockShape = BlockType.Z;
             CreateBlock();
         }
-
 
         public void DisplayBlock(PictureBox[,] gameGrid, int startX, int startY)
         {
@@ -61,6 +78,18 @@ namespace Tetris
             }
         }
 
+        public void SetMatrix(int[,] matrix)
+        {
+            CurrentMatrix = matrix;
+        }
+
+        public void Rotate()
+        {
+            System.Diagnostics.Debug.WriteLine("rotating");
+            rotationIndex = (rotationIndex + 1) % Rotations.Count;
+            CurrentMatrix = Rotations[rotationIndex];
+        }
+
         // Method to create the block by assigning the texture and matrix for the block based on its shape
         private void CreateBlock()
         {
@@ -68,72 +97,76 @@ namespace Tetris
             {
                 case BlockType.I:
                     Texture = Properties.Resources.TileCyan;
-                    CurrentMatrix = new int[,]
-                    {
-                        { 0, 0, 0, 0 },
-                        { 1, 1, 1, 1 },
-                        { 0, 0, 0, 0 },
-                        { 0, 0, 0, 0 }
-                    };
+                    Rotations = new List<int[,]>
+            {
+                new int[,] { { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } },
+                new int[,] { { 0, 0, 1, 0 }, { 0, 0, 1, 0 }, { 0, 0, 1, 0 }, { 0, 0, 1, 0 } },
+                new int[,] { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 0, 0, 0 } },
+                new int[,] { { 0, 1, 0, 0 }, { 0, 1, 0, 0 }, { 0, 1, 0, 0 }, { 0, 1, 0, 0 } }
+            };
                     break;
                 case BlockType.J:
                     Texture = Properties.Resources.TileBlue;
-                    CurrentMatrix = new int[,]
-                    {
-                        { 1, 0, 0 },
-                        { 1, 1, 1 },
-                        { 0, 0, 0 },
-                    };
+                    Rotations = new List<int[,]>
+            {
+                new int[,] { { 1, 0, 0 }, { 1, 1, 1 }, { 0, 0, 0 } },
+                new int[,] { { 0, 1, 1 }, { 0, 1, 0 }, { 0, 1, 0 } },
+                new int[,] { { 0, 0, 0 }, { 1, 1, 1 }, { 0, 0, 1 } },
+                new int[,] { { 0, 1, 0 }, { 0, 1, 0 }, { 1, 1, 0 } }
+            };
                     break;
                 case BlockType.L:
                     Texture = Properties.Resources.TileOrange;
-                    CurrentMatrix = new int[,]
-                    {
-                        { 0, 0, 1 },
-                        { 1, 1, 1 },
-                        { 0, 0, 0 },
-                        
-                    };
+                    Rotations = new List<int[,]>
+            {
+                new int[,] { { 0, 0, 1 }, { 1, 1, 1 }, { 0, 0, 0 } },
+                new int[,] { { 0, 1, 0 }, { 0, 1, 0 }, { 0, 1, 1 } },
+                new int[,] { { 0, 0, 0 }, { 1, 1, 1 }, { 1, 0, 0 } },
+                new int[,] { { 1, 1, 0 }, { 0, 1, 0 }, { 0, 1, 0 } }
+            };
                     break;
                 case BlockType.O:
                     Texture = Properties.Resources.TileYellow;
-                    CurrentMatrix = new int[,]
-                    {
-                        { 1, 1 },
-                        { 1, 1 },
-                    };
+                    Rotations = new List<int[,]>
+            {
+                new int[,] { { 1, 1 }, { 1, 1 } }
+            };
                     break;
                 case BlockType.S:
                     Texture = Properties.Resources.TileGreen;
-                    CurrentMatrix = new int[,]
-                    {
-                        { 0, 1, 1 },
-                        { 1, 1, 0 },
-                        { 0, 0, 0 },
-                    };
+                    Rotations = new List<int[,]>
+            {
+                new int[,] { { 0, 1, 1 }, { 1, 1, 0 }, { 0, 0, 0 } },
+                new int[,] { { 0, 1, 0 }, { 0, 1, 1 }, { 0, 0, 1 } },
+                new int[,] { { 0, 0, 0 }, { 0, 1, 1 }, { 1, 1, 0 } },
+                new int[,] { { 1, 0, 0 }, { 1, 1, 0 }, { 0, 1, 0 } }
+            };
                     break;
                 case BlockType.T:
                     Texture = Properties.Resources.TilePurple;
-                    CurrentMatrix = new int[,]
-                    {
-                        { 0, 1, 0 },
-                        { 1, 1, 1 },
-                        { 0, 0, 0 },
-                    };
+                    Rotations = new List<int[,]>
+            {
+                new int[,] { { 0, 1, 0 }, { 1, 1, 1 }, { 0, 0, 0 } },
+                new int[,] { { 0, 1, 0 }, { 0, 1, 1 }, { 0, 1, 0 } },
+                new int[,] { { 0, 0, 0 }, { 1, 1, 1 }, { 0, 1, 0 } },
+                new int[,] { { 0, 1, 0 }, { 1, 1, 0 }, { 0, 1, 0 } }
+            };
                     break;
                 case BlockType.Z:
                     Texture = Properties.Resources.TileRed;
-                    CurrentMatrix = new int[,]
-                    {
-                        { 1, 1, 0 },
-                        { 0, 1, 1 },
-                        { 0, 0, 0 },
-                    };
+                    Rotations = new List<int[,]>
+            {
+                new int[,] { { 1, 1, 0 }, { 0, 1, 1 }, { 0, 0, 0 } },
+                new int[,] { { 0, 1, 0 }, { 0, 1, 1 }, { 0, 0, 1 } },
+                new int[,] { { 0, 0, 0 }, { 1, 1, 0 }, { 0, 1, 1 } },
+                new int[,] { { 0, 1, 0 }, { 1, 1, 0 }, { 1, 0, 0 } }
+            };
                     break;
                 default:
                     break;
             }
+            CurrentMatrix = Rotations[0];
         }
+
     }
 }
-
