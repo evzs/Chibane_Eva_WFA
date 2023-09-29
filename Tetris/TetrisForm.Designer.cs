@@ -42,10 +42,10 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(773, 600);
+            ClientSize = new Size(765, 600);
             Controls.Add(gamePanel);
             Name = "TetrisForm";
-            Text = "Form1";
+            Text = "Tetris";
             Load += TetrisForm_Load;
             ResumeLayout(false);
         }
