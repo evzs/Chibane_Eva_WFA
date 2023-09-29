@@ -7,6 +7,7 @@ namespace Tetris
     {
 
         private System.Windows.Forms.Timer gameTimer = new System.Windows.Forms.Timer();
+        private System.Windows.Forms.Timer rowClearingTimer = new System.Windows.Forms.Timer();
 
         private bool blockSettled = false;
 
@@ -23,9 +24,13 @@ namespace Tetris
         public TetrisForm()
         {
 
-            gameTimer.Interval = 1000; // drop every second, you can adjust this value
+            gameTimer.Interval = 1000;
             gameTimer.Tick += GameTimer_Tick;
             gameTimer.Start();
+
+            rowClearingTimer.Interval = 100; 
+            rowClearingTimer.Tick += RowClearingTimer_Tick;
+            rowClearingTimer.Start();
 
             InitializeComponent();
 
@@ -98,7 +103,10 @@ namespace Tetris
                 DisplayCurrentBlock();
             }
         }
-
+        private void RowClearingTimer_Tick(object sender, EventArgs e)
+        {
+            RowCheck();  // Check and clear completed rows at each tick
+        }
 
 
         // Handle key events to move the block
@@ -170,7 +178,7 @@ namespace Tetris
 
             // Generate a new block and display it
             currentBlock = new Block();
-            currentBlockX = 3;  // Ensure that the new block starts from a centralized position.
+            currentBlockX = 3;  // Ensure that the new block starts from a centralized position
             currentBlockY = 0;
             DisplayCurrentBlock();
         }
@@ -365,6 +373,58 @@ namespace Tetris
                 }
             }
             return true;
+        }
+
+        private void RowCheck()
+        {
+            for (int y = 19; y >= 0; y--)
+            {
+                if (IsRowCompleted(y))
+                {
+                    ClearRow(y);
+                    ShiftRowsDown(y - 1);
+                    y++;
+                }
+            }
+        }
+
+        private bool IsRowCompleted(int row)
+        {
+            for (int x = 0; x < 10; x++)
+            {
+                if (!cellLocked[x, row]) // If any cell in the row is not locked, the row isn't complete
+                    return false;
+            }
+            return true;
+        }
+
+        private void ClearRow(int row)
+        {
+            for (int x = 0; x < 10; x++)
+            {
+                gameGrid[x, row].Image = null;
+                cellLocked[x, row] = false;
+            }
+        }
+
+        private void ShiftRowsDown(int startY)
+        {
+            for (int y = startY; y >= 0; y--)
+            {
+                for (int x = 0; x < 10; x++)
+                {
+                    if (y == 0)
+                    {
+                        gameGrid[x, y].Image = null;
+                        cellLocked[x, y] = false;
+                    }
+                    else
+                    {
+                        gameGrid[x, y + 1].Image = gameGrid[x, y].Image;
+                        cellLocked[x, y + 1] = cellLocked[x, y];
+                    }
+                }
+            }
         }
 
 
