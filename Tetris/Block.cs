@@ -43,13 +43,35 @@ namespace Tetris
             private set;
         }
 
-        // Constructor to initialize a block with a random shape (random temporary here - maybe)
+        private static Random random = new Random();
+        private static List<BlockType> bag = new List<BlockType>(); 
+
+        // Constructor to initialize a block with a random shape (using the 7 bag system)
         public Block()
         {
-            Random random = new Random();
-            BlockShape = (BlockType)random.Next(0, Enum.GetValues(typeof(BlockType)).Length);
-            // BlockShape = BlockType.Z;
+            if (bag.Count == 0)
+                RefillBag();
+
+            BlockShape = bag[0]; 
+            bag.RemoveAt(0); 
+
             CreateBlock();
+        }
+
+        private static void RefillBag()
+        {
+            bag.AddRange(Enum.GetValues(typeof(BlockType)).Cast<BlockType>());
+
+            // Shuffle the bag
+            int n = bag.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = random.Next(n + 1);
+                BlockType value = bag[k];
+                bag[k] = bag[n];
+                bag[n] = value;
+            }
         }
 
         public void DisplayBlock(PictureBox[,] gameGrid, int startX, int startY)
