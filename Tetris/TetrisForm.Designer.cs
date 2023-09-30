@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             gamePanel = new Panel();
+            scoreLabel = new Label();
+            nextBlockPanel = new Panel();
             SuspendLayout();
             // 
             // gamePanel
@@ -38,20 +40,40 @@
             gamePanel.Size = new Size(300, 600);
             gamePanel.TabIndex = 0;
             // 
+            // scoreLabel
+            // 
+            scoreLabel.AutoSize = true;
+            scoreLabel.Location = new Point(638, 55);
+            scoreLabel.Name = "scoreLabel";
+            scoreLabel.Size = new Size(0, 15);
+            scoreLabel.TabIndex = 1;
+            // 
+            // nextBlockPanel
+            // 
+            nextBlockPanel.Location = new Point(22, 100);
+            nextBlockPanel.Name = "nextBlockPanel";
+            nextBlockPanel.Size = new Size(176, 220);
+            nextBlockPanel.TabIndex = 2;
+            // 
             // TetrisForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(765, 600);
+            Controls.Add(nextBlockPanel);
+            Controls.Add(scoreLabel);
             Controls.Add(gamePanel);
             Name = "TetrisForm";
             Text = "Tetris";
             Load += TetrisForm_Load;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private Panel gamePanel;
+        private Label scoreLabel;
+        private Panel nextBlockPanel;
     }
 }

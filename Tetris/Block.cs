@@ -91,7 +91,7 @@ namespace Tetris
         }
 
         // Method to create the block by assigning the texture and matrix for the block based on its shape
-        private void CreateBlock()
+        public void CreateBlock()
         {
             switch (BlockShape)
             {
@@ -99,8 +99,14 @@ namespace Tetris
                     Texture = Properties.Resources.TileCyan;
                     Rotations = new List<int[,]>
             {
-                new int[,] { { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } },
-                new int[,] { { 0, 0, 1, 0 }, { 0, 0, 1, 0 }, { 0, 0, 1, 0 }, { 0, 0, 1, 0 } },
+                new int[,] { 
+                { 0, 0, 0, 0 }, 
+                { 1, 1, 1, 1 },
+                { 0, 0, 0, 0 },
+                { 0, 0, 0, 0 }
+                },
+                new int[,] {
+                    { 0, 0, 1, 0 }, { 0, 0, 1, 0 }, { 0, 0, 1, 0 }, { 0, 0, 1, 0 } },
                 new int[,] { { 0, 0, 0, 0 }, { 0, 0, 0, 0 }, { 1, 1, 1, 1 }, { 0, 0, 0, 0 } },
                 new int[,] { { 0, 1, 0, 0 }, { 0, 1, 0, 0 }, { 0, 1, 0, 0 }, { 0, 1, 0, 0 } }
             };
@@ -136,10 +142,26 @@ namespace Tetris
                     Texture = Properties.Resources.TileGreen;
                     Rotations = new List<int[,]>
             {
-                new int[,] { { 0, 1, 1 }, { 1, 1, 0 }, { 0, 0, 0 } },
-                new int[,] { { 0, 1, 0 }, { 0, 1, 1 }, { 0, 0, 1 } },
-                new int[,] { { 0, 0, 0 }, { 0, 1, 1 }, { 1, 1, 0 } },
-                new int[,] { { 1, 0, 0 }, { 1, 1, 0 }, { 0, 1, 0 } }
+                new int[,] {
+                { 0, 1, 1 },
+                { 1, 1, 0 },
+                { 0, 0, 0 }
+                },
+                new int[,] {
+                { 0, 1, 0 },
+                { 0, 1, 1 },
+                { 0, 0, 1 } 
+                },
+                new int[,] {
+                { 0, 0, 0 },
+                { 0, 1, 1 },
+                { 1, 1, 0 }
+                },
+                new int[,] {
+                { 1, 0, 0 },
+                { 1, 1, 0 },
+                { 0, 1, 0 }
+                }
             };
                     break;
                 case BlockType.T:
@@ -159,10 +181,21 @@ namespace Tetris
                 new int[,] { 
                 { 1, 1, 0 }, 
                 { 0, 1, 1 }, 
-                { 0, 0, 0 } },
-                new int[,] { { 0, 1, 0 }, { 0, 1, 1 }, { 0, 0, 1 } },
-                new int[,] { { 0, 0, 0 }, { 1, 1, 0 }, { 0, 1, 1 } },
-                new int[,] { { 0, 1, 0 }, { 1, 1, 0 }, { 1, 0, 0 } }
+                { 0, 0, 0 }
+                },
+                new int[,] {
+                    { 0, 0, 1 },
+                    { 0, 1, 1 },
+                    { 0, 1, 0 }
+                },
+                new int[,] {
+                    { 0, 0, 0 },
+                    { 1, 1, 0 },
+                    { 0, 1, 1 } },
+                new int[,] {
+                    { 0, 1, 0 },
+                    { 1, 1, 0 },
+                    { 1, 0, 0 } }
             };
                     break;
                 default:

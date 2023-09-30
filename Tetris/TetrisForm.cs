@@ -9,6 +9,8 @@ namespace Tetris
         private System.Windows.Forms.Timer gameTimer = new System.Windows.Forms.Timer();
         private System.Windows.Forms.Timer rowClearingTimer = new System.Windows.Forms.Timer();
 
+        private int scoreMilestone = 0;
+
         private bool blockSettled = false;
 
         // Define the game grid and the current block
@@ -19,7 +21,14 @@ namespace Tetris
         private int currentBlockX = 3;
         private int currentBlockY = 0;
 
+
+        private PictureBox[,] nextBlockPreview = new PictureBox[4, 4];
+        private Block nextBlock;
+
+
         private bool[,] cellLocked = new bool[10, 20];
+
+        private int score = 0;
 
         private bool gameOver = false;
 
@@ -31,7 +40,7 @@ namespace Tetris
             gameTimer.Tick += GameTimer_Tick;
             gameTimer.Start();
 
-            rowClearingTimer.Interval = 100; 
+            rowClearingTimer.Interval = 100;
             rowClearingTimer.Tick += RowClearingTimer_Tick;
             rowClearingTimer.Start();
 
@@ -40,12 +49,16 @@ namespace Tetris
             // Initialize the game grid
             InitializeGameGrid();
 
+            InitializeNextBlockPreview();
+
             // Enable key events for the form
             this.KeyPreview = true;
             this.KeyDown += TetrisForm_KeyDown;
 
             // Create a new block and display it
             currentBlock = new Block();
+            nextBlock = new Block();
+            DisplayNextBlockPreview();
             DisplayCurrentBlock();
 
             this.DoubleBuffered = true;
@@ -84,9 +97,34 @@ namespace Tetris
             }
         }
 
+        private void InitializeNextBlockPreview()
+        {
+            int tileWidth = 30;
+            int tileHeight = 30;
+
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    PictureBox pictureBox = new PictureBox();
+
+                    pictureBox.Width = tileWidth;
+                    pictureBox.Height = tileHeight;
+                    pictureBox.BorderStyle = BorderStyle.FixedSingle;
+                    pictureBox.BackColor = Color.Black;
+
+                    pictureBox.Location = new Point(x * tileWidth, y * tileHeight);
+
+                    nextBlockPanel.Controls.Add(pictureBox);
+
+                    nextBlockPreview[x, y] = pictureBox;
+                }
+            }
+        }
+
+
         private void GameTimer_Tick(object sender, EventArgs e)
         {
-
             if (gameOver) return;
             if (MoveDown())
             {
@@ -101,13 +139,20 @@ namespace Tetris
                 // Reset the flag for the next block
                 blockSettled = false;
 
-                // Create a new block
-                currentBlock = new Block();
+                // Swap current block with the next block
+                currentBlock = nextBlock;
+
+                // Display the (former) next block in the current block's position
                 currentBlockX = 3;
                 currentBlockY = 0;
                 DisplayCurrentBlock();
+
+                // Generate a new next block
+                nextBlock = new Block();
+                DisplayNextBlockPreview();
             }
         }
+
         private void RowClearingTimer_Tick(object sender, EventArgs e)
         {
             if (gameOver) return;
@@ -185,7 +230,7 @@ namespace Tetris
 
             // Generate a new block and display it
             currentBlock = new Block();
-            currentBlockX = 3;  // Ensure that the new block starts from a centralized position
+            currentBlockX = 3;
             currentBlockY = 0;
             DisplayCurrentBlock();
         }
@@ -389,18 +434,67 @@ namespace Tetris
             return true;
         }
 
+        private void DisplayNextBlockPreview()
+        {
+            ClearNextBlockPreview();
+
+            for (int y = 0; y < nextBlock.CurrentMatrix.GetLength(0); y++)
+            {
+                for (int x = 0; x < nextBlock.CurrentMatrix.GetLength(1); x++)
+                {
+                    if (nextBlock.CurrentMatrix[y, x] == 1)
+                    {
+                        PictureBox pictureBox = nextBlockPreview[x, y];
+                        pictureBox.Image = nextBlock.Texture;
+                        pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                    }
+                }
+            }
+        }
+
+
+        private void ClearNextBlockPreview()
+        {
+            for (int y = 0; y < 4; y++)
+            {
+                for (int x = 0; x < 4; x++)
+                {
+                    nextBlockPreview[x, y].Image = null;
+                }
+            }
+        }
+
+
         private void RowCheck()
         {
+            int clearedRows = 0;
+
             for (int y = 19; y >= 0; y--)
             {
                 if (IsRowCompleted(y))
                 {
+                    clearedRows++;
                     ClearRow(y);
                     ShiftRowsDown(y - 1);
                     y++;
                 }
             }
+            switch (clearedRows)
+            {
+                case 1: score += 100; break;
+                case 2: score += 300; break;
+                case 3: score += 500; break;
+            }
+
+            scoreLabel.Text = $"Score: {score}";
+
+            if (score - scoreMilestone >= 1000)
+            {
+                IncreaseGameSpeed();
+                scoreMilestone = score;
+            }
         }
+
 
         private bool IsRowCompleted(int row)
         {
@@ -451,6 +545,11 @@ namespace Tetris
                 }
             }
             return false;
+        }
+
+        private void IncreaseGameSpeed()
+        {
+            gameTimer.Interval = Math.Max(gameTimer.Interval - 100, 100);
         }
 
 
