@@ -31,38 +31,69 @@
             gamePanel = new Panel();
             scoreLabel = new Label();
             nextBlockPanel = new Panel();
+            nextBlockLabel = new Label();
+            rowsClearedLabel = new Label();
             SuspendLayout();
             // 
             // gamePanel
             // 
+            gamePanel.Font = new Font("Verdana", 24F, FontStyle.Bold, GraphicsUnit.Point);
             gamePanel.Location = new Point(235, 0);
             gamePanel.Name = "gamePanel";
             gamePanel.Size = new Size(300, 600);
             gamePanel.TabIndex = 0;
+            gamePanel.Paint += gamePanel_Paint;
             // 
             // scoreLabel
             // 
             scoreLabel.AutoSize = true;
-            scoreLabel.Location = new Point(638, 55);
+            scoreLabel.Font = new Font("Bahnschrift", 24F, FontStyle.Bold, GraphicsUnit.Point);
+            scoreLabel.Location = new Point(562, 22);
             scoreLabel.Name = "scoreLabel";
-            scoreLabel.Size = new Size(0, 15);
+            scoreLabel.Size = new Size(0, 39);
             scoreLabel.TabIndex = 1;
             // 
             // nextBlockPanel
             // 
-            nextBlockPanel.Location = new Point(22, 100);
+            nextBlockPanel.Location = new Point(22, 57);
             nextBlockPanel.Name = "nextBlockPanel";
-            nextBlockPanel.Size = new Size(176, 220);
+            nextBlockPanel.Size = new Size(190, 192);
             nextBlockPanel.TabIndex = 2;
+            nextBlockPanel.Paint += nextBlockPanel_Paint;
+            // 
+            // nextBlockLabel
+            // 
+            nextBlockLabel.AutoSize = true;
+            nextBlockLabel.Font = new Font("Bahnschrift", 24F, FontStyle.Bold, GraphicsUnit.Point);
+            nextBlockLabel.Location = new Point(31, 16);
+            nextBlockLabel.Name = "nextBlockLabel";
+            nextBlockLabel.Size = new Size(172, 39);
+            nextBlockLabel.TabIndex = 3;
+            nextBlockLabel.Text = "Next Block";
+            nextBlockLabel.Click += nextBlockLabel_Click;
+            // 
+            // rowsClearedLabel
+            // 
+            rowsClearedLabel.AutoSize = true;
+            rowsClearedLabel.Font = new Font("Bahnschrift", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            rowsClearedLabel.Location = new Point(566, 69);
+            rowsClearedLabel.Name = "rowsClearedLabel";
+            rowsClearedLabel.Size = new Size(0, 19);
+            rowsClearedLabel.TabIndex = 4;
+            rowsClearedLabel.Click += label1_Click;
             // 
             // TetrisForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.Desktop;
             ClientSize = new Size(765, 600);
+            Controls.Add(rowsClearedLabel);
+            Controls.Add(nextBlockLabel);
             Controls.Add(nextBlockPanel);
             Controls.Add(scoreLabel);
             Controls.Add(gamePanel);
+            ForeColor = SystemColors.ControlLightLight;
             Name = "TetrisForm";
             Text = "Tetris";
             Load += TetrisForm_Load;
@@ -75,5 +106,7 @@
         private Panel gamePanel;
         private Label scoreLabel;
         private Panel nextBlockPanel;
+        private Label nextBlockLabel;
+        private Label rowsClearedLabel;
     }
 }
