@@ -118,8 +118,26 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ARROWDOWN" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ARROWDOWN.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ARROWLEFT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ARROWLEFT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ARROWRIGHT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ARROWRIGHT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ARROWUP" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ARROWUP.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Music" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tetris.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="SHIFT" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SHIFT.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SPACE" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SPACE.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TileBlue" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TileBlue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

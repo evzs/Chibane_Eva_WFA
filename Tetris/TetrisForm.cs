@@ -42,7 +42,7 @@ namespace Tetris
         public TetrisForm()
         {
             // Component and Form Initialization
-            InitializeComponent(); 
+            InitializeComponent();
             this.DoubleBuffered = true;
             this.KeyPreview = true;
             this.KeyDown += TetrisForm_KeyDown;
@@ -69,8 +69,6 @@ namespace Tetris
             DisplayNextBlock();
             DisplayCurrentBlock();
         }
-
-
 
         private void InitializeGameGrid()
         {
@@ -121,7 +119,7 @@ namespace Tetris
 
                     pictureBox.Width = tileWidth;
                     pictureBox.Height = tileHeight;
-                    pictureBox.BackColor = Color.Black;
+                    pictureBox.BackColor = Color.Transparent;
 
                     pictureBox.Location = new Point(x * tileWidth, y * tileHeight);
 
@@ -149,7 +147,7 @@ namespace Tetris
 
                     pictureBox.Width = tileWidth;
                     pictureBox.Height = tileHeight;
-                    pictureBox.BackColor = Color.Black;
+                    pictureBox.BackColor = Color.Transparent;
 
                     pictureBox.Location = new Point(x * tileWidth, y * tileHeight);
 
@@ -673,6 +671,7 @@ namespace Tetris
         private void UpdateRowsCleared()
         {
             rowsClearedLabel.Text = $"Rows Cleared: {totalRowsCleared}";
+            rowsClearedLabel.BackColor = Color.Transparent;
         }
 
         private void UpdateScore(int clearedRows)
@@ -685,6 +684,7 @@ namespace Tetris
                 case 4: score += 800; break;
             }
             scoreLabel.Text = $"Score: {score}";
+            scoreLabel.BackColor = Color.Transparent;
         }
 
         private bool PositionCheck(Block block, int posX, int posY)
@@ -764,6 +764,31 @@ namespace Tetris
         }
 
         private void heldBlockPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pictureBox5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void controlsLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
         {
 
         }
