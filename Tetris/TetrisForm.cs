@@ -103,6 +103,9 @@ namespace Tetris
             }
         }
 
+        // Initializes the panel and preview grid for the held block
+        // This method sets the size of the panel, creates PictureBox controls for the preview grid,
+        // and assigns them to the 'heldBlockPreview' array for future use
         private void InitializeHeldBlockPreview()
         {
             int tileWidth = 30;
@@ -130,7 +133,9 @@ namespace Tetris
             }
         }
 
-
+        // Initializes the panel and preview grid for the next block
+        // Similar to 'InitializeHeldBlockPreview', this method sets the size of the panel,
+        // creates PictureBox controls for the preview grid, and assigns them to the 'nextBlockPreview' array
         private void InitializeNextBlockPreview()
         {
             int tileWidth = 30;
@@ -165,28 +170,37 @@ namespace Tetris
          * 
          */
 
+        // Event handler for the game timer tick event, responsible for advancing the game state
         private void GameTimer_Tick(object sender, EventArgs e)
         {
+            // Check if the game is over; if so, do nothing and return
             if (gameOver) return;
+
+            // Attempt to move the current block down by one grid cell
             if (MoveDown())
             {
+                // If the move is successful, increment the current block's Y position
                 currentBlockY++;
+                // Refresh the game grid to reflect the updated block position
                 RefreshGameGrid();
             }
             else
             {
+                // If the block cannot move down further, it has reached its lowest position
+
                 // Lock current block in its place
                 LockCurrentBlock();
 
-                // Swap current block with the next block
+                // Swap current block with the next block to prepare for the next move
                 currentBlock = nextBlock;
 
-                // Reset the flag for the next block
+                // Reset the flag indicating that the block has settled in its final position
                 blockSettled = false;
 
-                // Display the (former) next block in the current block's position
+                // Set the initial position of the new current block
                 currentBlockX = 3;
                 currentBlockY = 0;
+
                 DisplayCurrentBlock();
 
                 // Generate a new next block and display it
@@ -194,52 +208,62 @@ namespace Tetris
             }
         }
 
+        // Event handler for the row clearing timer tick event, responsible for checking and clearing completed rows
         private void RowClearingTimer_Tick(object sender, EventArgs e)
         {
             if (gameOver) return;
-            RowCheck();  // Check and clear completed rows at each tick
+            RowCheck();
         }
 
+        // Check for completed rows and clear them
         private void RowCheck()
         {
-            int clearedRows = 0;
+            int clearedRows = 0; // Counter for the number of cleared rows
 
+            // Loop through the rows from the bottom to the top of the game grid
             for (int y = 19; y >= 0; y--)
             {
                 if (IsRowCompleted(y))
                 {
-                    clearedRows++;
-                    ClearRow(y);
+                    clearedRows++; // Increment the count of cleared rows
+                    ClearRow(y); // Clear the completed row
+
+                    // Shift all rows above the cleared row down by one position
                     ShiftRowsDown(y - 1);
+
+                    // Restart the loop at the same position to re-check the newly shifted row
                     y++;
                 }
             }
 
-            totalRowsCleared += clearedRows;
+            totalRowsCleared += clearedRows; // Update the total number of cleared rows
 
             UpdateScore(clearedRows);
             AdjustGameSpeed(clearedRows);
             UpdateRowsCleared();
         }
 
-        private void IncreaseGameSpeed()
-        {
-            gameTimer.Interval = Math.Max(gameTimer.Interval - 100, 100);
-        }
-
+        // Adjust the game speed based on the number of cleared rows
         private void AdjustGameSpeed(int clearedRows)
         {
+            // Decrease the interval of the game timer to make the game faster
+            // The interval reduction is proportional to the number of cleared rows, with a minimum interval of 100 milliseconds
             if (clearedRows > 0)
             {
                 gameTimer.Interval = Math.Max(gameTimer.Interval - (50 * clearedRows), 100);
             }
 
+            // Check if the player's score has reached a milestone
             if (score - scoreMilestone >= 1000)
             {
+                // Increase the score milestone by 1000 to track the next milestone
                 scoreMilestone += 1000;
             }
         }
 
+        // Check if the game is over by examining the top row of the game grid
+        // Returns true if any cell in the top row is locked (indicating a blocked top row)
+        // otherwise returns false, indicating that the game can continue
         private bool IsGameOver()
         {
             for (int x = 0; x < 10; x++)
@@ -251,8 +275,6 @@ namespace Tetris
             }
             return false;
         }
-
-
 
         /*                             
          *                  
@@ -309,6 +331,7 @@ namespace Tetris
             }
         }
 
+        // Clear the current block on the game grid
         private void ClearCurrentBlock()
         {
             // Loop through each row of the block's matrix
@@ -334,6 +357,7 @@ namespace Tetris
             }
         }
 
+        // Display the next block on the next block preview grid
         private void DisplayNextBlock()
         {
             nextBlock = new Block();
@@ -343,11 +367,16 @@ namespace Tetris
         private void DisplayNextBlockPreview()
         {
             ClearNextBlockPreview();
+
+            // Calculate the center position of the preview grid
             int centerX = (nextBlockPreview.GetLength(0) - 1) / 2;
             int centerY = (nextBlockPreview.GetLength(1) - 1) / 2;
+
+            // Calculate the center position of the current block's matrix
             int blockCenterX = (nextBlock.CurrentMatrix.GetLength(0) - 1) / 2;
             int blockCenterY = (nextBlock.CurrentMatrix.GetLength(1) - 1) / 2;
 
+            // Calculate the starting position for rendering the block preview
             int startX = centerX - blockCenterX;
             int startY = centerY - blockCenterY;
 
@@ -376,6 +405,7 @@ namespace Tetris
             }
         }
 
+        // Display the held block on the held block preview grid
         private void DisplayHeldBlock()
         {
             if (heldBlock == null)
@@ -428,14 +458,16 @@ namespace Tetris
          * 
          */
 
-        // Handle key events to move the block
+        // Event handler for key events to control the movement and actions of the Tetris block
         private void TetrisForm_KeyDown(object sender, KeyEventArgs e)
-
-
         {
+            // Create a copy of the current block's matrix before any potential changes
             int[,] previousMatrix = (int[,])currentBlock.CurrentMatrix.Clone();
-            if (blockSettled) return;
-            if (gameOver) return;
+
+            // Check if the block has settled or if the game is over - if so, do nothing and return
+            if (blockSettled || gameOver) return;
+
+            // Handle key events to move the block
             switch (e.KeyCode)
             {
                 case Keys.Left:
@@ -463,6 +495,7 @@ namespace Tetris
                     break;
 
                 case Keys.Up:
+                    // Clear the current block from the grid, rotate it, and check if the new position is valid
                     ClearCurrentBlock();
                     currentBlock.Rotate();
 
@@ -475,9 +508,11 @@ namespace Tetris
                     RefreshGameGrid();
                     break;
                 case Keys.Space:
+                    // Perform a hard drop to instantly move the block to the lowest possible position
                     HardDrop();
                     break;
                 case Keys.ShiftKey:
+                    // Hold first block - Swap the current block with the held block (if any)
                     BlockSwap();
                     break;
             }
@@ -544,6 +579,7 @@ namespace Tetris
 
         private void HardDrop()
         {
+            // Keep moving the block down as long as it can move
             while (MoveDown())
             {
                 currentBlockY++;
@@ -566,8 +602,10 @@ namespace Tetris
             DisplayNextBlock();
         }
 
+        // Swap the current Tetris block with the held block (if available)
         private void BlockSwap()
         {
+            // If no block is currently held, swap the current block to held block
             if (heldBlock == null)
             {
                 heldBlock = currentBlock;
@@ -581,6 +619,7 @@ namespace Tetris
             }
             else if (canSwap)
             {
+                // If a block is already held and a swap is allowed, perform the swap
                 Block temp = currentBlock;
                 currentBlock = heldBlock;
                 heldBlock = temp;
@@ -588,13 +627,14 @@ namespace Tetris
                 currentBlockX = 3;
                 currentBlockY = 0;
                 DisplayCurrentBlock();
-                canSwap = false;
+                canSwap = false; // Prevent further swaps during this turn
             }
         }
 
+        // Lock the current Tetris block in its current position on the game grid
         private void LockCurrentBlock()
         {
-            blockSettled = true;
+            blockSettled = true; // Set the flag to indicate that the block has settled in its final position
 
             for (int y = 0; y < currentBlock.CurrentMatrix.GetLength(0); y++)
             {
@@ -614,14 +654,15 @@ namespace Tetris
                     }
                 }
             }
+            // Check if the game is over (top row is blocked)
             if (IsGameOver())
             {
-                gameTimer.Stop();
-                rowClearingTimer.Stop();
-                gameOver = true;
+                gameTimer.Stop(); // Stop the game timer
+                rowClearingTimer.Stop(); ; // Stop the row clearing timer
+                gameOver = true; // Set the game over flag
                 MessageBox.Show("Game Over!");
             }
-            canSwap = true;
+            canSwap = true; // Allow block swapping again after locking
         }
 
         /*
@@ -629,16 +670,20 @@ namespace Tetris
          * Game Logic
          * 
          */
+
+        // Check if a specific row is completely filled with locked cells (blocks)
         private bool IsRowCompleted(int row)
         {
             for (int x = 0; x < 10; x++)
             {
-                if (!cellLocked[x, row]) // If any cell in the row is not locked, the row isn't complete
+                // If any cell in the row is not locked, the row isn't complete
+                if (!cellLocked[x, row]) 
                     return false;
             }
             return true;
         }
 
+        // Clear all cells in a specific row by removing their images and unlocking them
         private void ClearRow(int row)
         {
             for (int x = 0; x < 10; x++)
@@ -648,6 +693,7 @@ namespace Tetris
             }
         }
 
+        // Shift all rows starting from startY downwards to fill any cleared rows
         private void ShiftRowsDown(int startY)
         {
             for (int y = startY; y >= 0; y--)
@@ -674,10 +720,12 @@ namespace Tetris
             rowsClearedLabel.BackColor = Color.Transparent;
         }
 
+        // Update the player's score based on the number of rows cleared
         private void UpdateScore(int clearedRows)
         {
             switch (clearedRows)
             {
+                // Calculate and update the score based on the number of rows cleared
                 case 1: score += 100; break;
                 case 2: score += 300; break;
                 case 3: score += 500; break;
@@ -687,6 +735,7 @@ namespace Tetris
             scoreLabel.BackColor = Color.Transparent;
         }
 
+        // Check if a given position for a Tetris block is valid (no collisions or boundary hits)
         private bool PositionCheck(Block block, int posX, int posY)
         {
             for (int y = 0; y < block.CurrentMatrix.GetLength(0); y++)

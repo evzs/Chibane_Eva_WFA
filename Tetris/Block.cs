@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
+    // Enumeration to represent different types of Tetris blocks
     public enum BlockType
     {
         I,
@@ -36,17 +37,18 @@ namespace Tetris
             if (bag.Count == 0)
                 RefillBag();
 
-            BlockShape = bag[0];
-            bag.RemoveAt(0);
+            BlockShape = bag[0]; // Get the next block type from the bag
+            bag.RemoveAt(0); // Remove the block type from the bag
 
-            CreateBlock();
+            CreateBlock(); // Create the block based on its type
         }
 
+        // Refills the bag with all block types and shuffles them
         private static void RefillBag()
         {
             bag.AddRange(Enum.GetValues(typeof(BlockType)).Cast<BlockType>());
 
-            // Shuffle the bag
+            // Shuffle the bag using Fisher-Yates shuffle algorithm
             int n = bag.Count;
             while (n > 1)
             {
@@ -58,6 +60,7 @@ namespace Tetris
             }
         }
 
+        // Method to display the block on the game grid
         public void DisplayBlock(PictureBox[,] gameGrid, int startX, int startY)
         {
             // Loop through each row of the block's matrix
@@ -96,12 +99,17 @@ namespace Tetris
 
         public void Rotate()
         {
-            System.Diagnostics.Debug.WriteLine("rotating");
+            // System.Diagnostics.Debug.WriteLine("rotating");
+
+            // Increment the rotation index to select the next rotation
             rotationIndex = (rotationIndex + 1) % Rotations.Count;
+
+            // Update the current matrix of the block with the selected rotation matrix
             CurrentMatrix = Rotations[rotationIndex];
         }
 
-        // Method to create the block by assigning the texture and matrix for the block based on its shape
+        // Method to create the block by assigning the texture and matrix for the block based on its shape, as well as their rotation state
+        // Each rotation is represented as a 2D matrix
         public virtual void CreateBlock()
         {
             switch (BlockShape)
