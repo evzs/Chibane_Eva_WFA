@@ -22,10 +22,11 @@ This project is a Tetris game implementation built with C# and Windows Forms App
 - **User-friendly-ish UI:** Almost there.
 
 ## Setup & Installation
-
+(unsure)
 1. Clone the repository: `git clone https://github.com/evzs/Chibane_Eva_WFA.git`.
 2. Navigate to the project directory: `cd Chibane_Eva_WFA`.
-3. Run the game by opening the .sln file.
+3. Open the .sln file.
+4. Run Tetris.
 
 ## Contributing
 
