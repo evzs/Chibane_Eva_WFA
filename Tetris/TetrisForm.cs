@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Media;
 
 namespace Tetris
 {
@@ -8,6 +9,7 @@ namespace Tetris
 
         private System.Windows.Forms.Timer gameTimer = new System.Windows.Forms.Timer();
         private System.Windows.Forms.Timer rowClearingTimer = new System.Windows.Forms.Timer();
+        private SoundPlayer backgroundMusic;
 
         private int scoreMilestone = 0;
 
@@ -23,12 +25,13 @@ namespace Tetris
         private int currentBlockX = 3;
         private int currentBlockY = 0;
 
+        private PictureBox[,] nextBlockPreview = new PictureBox[6, 6];
+        private Block nextBlock;
+
+        private PictureBox[,] heldBlockPreview = new PictureBox[6, 6];
         private Block heldBlock = null;
         private bool canSwap = true;
 
-
-        private PictureBox[,] nextBlockPreview = new PictureBox[6, 6];
-        private Block nextBlock;
 
 
         private bool[,] cellLocked = new bool[10, 20];
@@ -36,6 +39,8 @@ namespace Tetris
         private int score = 0;
 
         private bool gameOver = false;
+
+        private GhostBlock ghostBlock;
 
 
         public TetrisForm()
@@ -51,9 +56,12 @@ namespace Tetris
 
             InitializeComponent();
 
+            PlayBackgroundMusic();
+
             // Initialize the game grid
             InitializeGameGrid();
 
+            InitializeHeldBlockPreview();
             InitializeNextBlockPreview();
 
             // Enable key events for the form
@@ -67,6 +75,19 @@ namespace Tetris
 
             this.DoubleBuffered = true;
         }
+
+        private void PlayBackgroundMusic()
+        {
+            backgroundMusic = new SoundPlayer(Properties.Resources.Music);
+            backgroundMusic.PlayLooping(); 
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            base.OnFormClosing(e);
+            backgroundMusic?.Stop();
+        }
+
 
         private void InitializeGameGrid()
         {
@@ -100,6 +121,34 @@ namespace Tetris
                 }
             }
         }
+
+        private void InitializeHeldBlockPreview()
+        {
+            int tileWidth = 30;
+            int tileHeight = 30;
+
+            heldBlockPanel.Width = 6 * tileWidth;
+            heldBlockPanel.Height = 6 * tileHeight;
+
+            for (int y = 0; y < 6; y++)
+            {
+                for (int x = 0; x < 6; x++)
+                {
+                    PictureBox pictureBox = new PictureBox();
+
+                    pictureBox.Width = tileWidth;
+                    pictureBox.Height = tileHeight;
+                    pictureBox.BackColor = Color.Black;
+
+                    pictureBox.Location = new Point(x * tileWidth, y * tileHeight);
+
+                    heldBlockPanel.Controls.Add(pictureBox);
+
+                    heldBlockPreview[x, y] = pictureBox;
+                }
+            }
+        }
+
 
         private void InitializeNextBlockPreview()
         {
@@ -214,6 +263,9 @@ namespace Tetris
                     break;
                 case Keys.Space:
                     HardDrop();
+                    break;
+                case Keys.ShiftKey:
+                    BlockSwap();
                     break;
             }
         }
@@ -407,6 +459,7 @@ namespace Tetris
                 gameOver = true;
                 MessageBox.Show("Game Over!");
             }
+            canSwap = true;
         }
 
 
@@ -485,6 +538,78 @@ namespace Tetris
                 }
             }
         }
+
+        private void BlockSwap()
+        {
+            if (heldBlock == null)
+            {
+                heldBlock = currentBlock;
+                DisplayHeldBlock();
+                currentBlock = nextBlock;
+                currentBlockX = 3;
+                currentBlockY = 0;
+                DisplayCurrentBlock();
+                DisplayNextBlock();
+                canSwap = false;
+            }
+            else if (canSwap)
+            {
+                Block temp = currentBlock;
+                currentBlock = heldBlock;
+                heldBlock = temp;
+                DisplayHeldBlock();
+                currentBlockX = 3;
+                currentBlockY = 0;
+                DisplayCurrentBlock();
+                canSwap = false;
+            }
+        }
+
+        private void DisplayHeldBlock()
+        {
+            if (heldBlock == null)
+                return;
+
+            DisplayHeldBlockPreview();
+        }
+
+        private void DisplayHeldBlockPreview()
+        {
+            ClearHeldBlockPreview();
+
+            int centerX = (heldBlockPreview.GetLength(0) - 1) / 2;
+            int centerY = (heldBlockPreview.GetLength(1) - 1) / 2;
+            int blockCenterX = (heldBlock.CurrentMatrix.GetLength(0) - 1) / 2;
+            int blockCenterY = (heldBlock.CurrentMatrix.GetLength(1) - 1) / 2;
+
+            int startX = centerX - blockCenterX;
+            int startY = centerY - blockCenterY;
+
+            for (int y = 0; y < heldBlock.CurrentMatrix.GetLength(0); y++)
+            {
+                for (int x = 0; x < heldBlock.CurrentMatrix.GetLength(1); x++)
+                {
+                    if (heldBlock.CurrentMatrix[y, x] == 1)
+                    {
+                        PictureBox pictureBox = heldBlockPreview[startX + x, startY + y];
+                        pictureBox.Image = heldBlock.Texture;
+                        pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                    }
+                }
+            }
+        }
+
+        private void ClearHeldBlockPreview()
+        {
+            for (int y = 0; y < 6; y++)
+            {
+                for (int x = 0; x < 6; x++)
+                {
+                    heldBlockPreview[x, y].Image = null;
+                }
+            }
+        }
+
 
 
         private void RowCheck()
@@ -617,7 +742,17 @@ namespace Tetris
 
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void rowsClearedLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void heldBlockLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void heldBlockPanel_Paint(object sender, PaintEventArgs e)
         {
 
         }

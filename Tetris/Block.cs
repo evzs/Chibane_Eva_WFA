@@ -28,7 +28,7 @@ namespace Tetris
         public Image Texture
         {
             get;
-            private set;
+            protected set;
         }
         public int[,] CurrentMatrix
         {
@@ -105,6 +105,11 @@ namespace Tetris
             CurrentMatrix = matrix;
         }
 
+        protected void SetTexture(Image texture)
+        {
+            this.Texture = texture;
+        }
+
         public void Rotate()
         {
             System.Diagnostics.Debug.WriteLine("rotating");
@@ -113,7 +118,7 @@ namespace Tetris
         }
 
         // Method to create the block by assigning the texture and matrix for the block based on its shape
-        public void CreateBlock()
+        public virtual void CreateBlock()
         {
             switch (BlockShape)
             {
