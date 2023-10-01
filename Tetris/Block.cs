@@ -20,31 +20,15 @@ namespace Tetris
 
     public class Block
     {
-        public BlockType BlockShape
-        {
-            get;
-            set;
-        }
-        public Image Texture
-        {
-            get;
-            protected set;
-        }
-        public int[,] CurrentMatrix
-        {
-            get;
-            private set;
-        }
+        public BlockType BlockShape { get; set; }
+        public Image Texture { get; protected set; }
+        public int[,] CurrentMatrix { get; private set; }
 
         private int rotationIndex = 0;
-        public List<int[,]> Rotations
-        {
-            get;
-            private set;
-        }
+        public List<int[,]> Rotations { get; private set; }
 
         private static Random random = new Random();
-        private static List<BlockType> bag = new List<BlockType>(); 
+        private static List<BlockType> bag = new List<BlockType>();
 
         // Constructor to initialize a block with a random shape (using the 7 bag system)
         public Block()
@@ -52,8 +36,8 @@ namespace Tetris
             if (bag.Count == 0)
                 RefillBag();
 
-            BlockShape = bag[0]; 
-            bag.RemoveAt(0); 
+            BlockShape = bag[0];
+            bag.RemoveAt(0);
 
             CreateBlock();
         }
