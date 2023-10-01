@@ -76,3 +76,4 @@ This project is licensed under the MIT License.
 - [?] Game loop
 - [x] Game over condition (lines filled to the top)
 - [ ] Game state control - Pause/Resume/Exit
+- [ ] ...
