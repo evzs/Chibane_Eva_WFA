@@ -71,8 +71,8 @@ This project is licensed under the MIT License.
 - [ ] "Ghost" blocks
 - [x] Block holding mechanism
 - [x] Difficulty - increased falling speed as score increases
-[~] Game over condition - display
+- [~] Game over condition - display
 - [x] Background music - Sound effects
-[?] Game loop
+- [?] Game loop
 - [x] Game over condition (lines filled to the top)
 - [ ] Game state control - Pause/Resume/Exit
