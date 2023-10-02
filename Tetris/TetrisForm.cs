@@ -250,7 +250,7 @@ namespace Tetris
             // The interval reduction is proportional to the number of cleared rows, with a minimum interval of 100 milliseconds
             if (clearedRows > 0)
             {
-                gameTimer.Interval = Math.Max(gameTimer.Interval - (50 * clearedRows), 100);
+                gameTimer.Interval = Math.Max(gameTimer.Interval - (30 * clearedRows), 100);
             }
 
             // Check if the player's score has reached a milestone
