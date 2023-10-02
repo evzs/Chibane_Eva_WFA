@@ -22,9 +22,10 @@ This project is a Tetris game implementation built with C# and Windows Forms App
 - **User-friendly-ish UI:** Almost there.
 
 ## Setup & Installation
-(unsure)
+(unsure - if you're my instructor and you run into issues contact me ASAP please)
+In Visual Studio:
 1. Clone the repository: `git clone https://github.com/evzs/Chibane_Eva_WFA.git`.
-2. Navigate to the project directory: `cd Chibane_Eva_WFA`.
+2. Navigate to the project directory.
 3. Open the .sln file.
 4. Run Tetris.
 
@@ -76,3 +77,4 @@ This project is licensed under the MIT License.
 - [?] Game loop
 - [x] Game over condition (lines filled to the top)
 - [ ] Game state control - Pause/Resume/Exit
+- [ ] ...
